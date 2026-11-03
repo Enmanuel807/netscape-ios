@@ -1,56 +1,62 @@
 <!DOCTYPE html>
 <html lang="es">
-    <!-- Metadatos y soporte para pantalla de inicio en iOS -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Netscape">
-    <link rel="apple-touch-icon" href="img/nts.ico">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Netscape Navigator - iOS Edition</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Netscape Navigator - Safari iOS Edition</title>
     <link rel="icon" type="image/x-icon" href="img/nts.ico">
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="theme-aero">
 
-    <!-- Cabecera / Barra superior estilo Aero -->
+    <!-- Cabecera superior limpia -->
     <header class="netscape-header">
         <div class="logo-title-container">
-            <img src="img/netscape-anim.gif" alt="Netscape Logo" class="netscape-logo" onerror="this.src='img/nts.ico'">
             <span class="app-title">Netscape Navigator™</span>
         </div>
-        <button id="btn-options-trigger" class="header-btn" title="Opciones">⚙️</button>
+        <button id="btn-options-trigger" class="header-btn" title="Ajustes">&#9881;</button>
     </header>
 
-    <!-- Sistema de Pestañas Móvil en la App -->
-    <div class="app-tab-bar" id="tab-container">
-        <button id="btn-new-tab" class="tab-add">+</button>
-    </div>
-
-    <!-- Contenedor Web Viewport -->
+    <!-- Visor web central -->
     <div class="browser-viewport" id="browser-container"></div>
 
-    <!-- Barra de herramientas inferior táctil -->
+    <!-- VISTA PREVIA DE PESTAÑAS ESTILO SAFARI (GRID/TARJETERO OVERLAY) -->
+    <div class="tabs-switcher-overlay" id="tabs-switcher-overlay">
+        <div class="tabs-switcher-header">
+            <button id="btn-add-tab-switcher" class="switcher-btn-add">+ Pestaña</button>
+            <span class="switcher-title">Pestañas abiertas</span>
+            <button id="btn-close-switcher" class="switcher-btn-done">Listo</button>
+        </div>
+        <div class="tabs-grid-container" id="tabs-grid-container">
+            <!-- Las tarjetas/previsualizaciones de cada pestaña se generarán aquí -->
+        </div>
+    </div>
+
+    <!-- BARRA DE HERRAMIENTAS INFERIOR (ESTILO SAFARI) -->
     <footer class="mobile-toolbar">
-        <button id="btn-back" class="nav-btn" title="Atrás">◄</button>
-        <button id="btn-forward" class="nav-btn" title="Adelante">►</button>
-        <button id="btn-reload" class="nav-btn" title="Recargar">🔄</button>
-        <button id="btn-home" class="nav-btn" title="Inicio">🏠</button>
+        <button id="btn-back" class="nav-btn" title="Atrás">&#9668;</button>
+        <button id="btn-forward" class="nav-btn" title="Adelante">&#9658;</button>
+        <button id="btn-reload" class="nav-btn" title="Recargar">&#8635;</button>
+        <button id="btn-home" class="nav-btn" title="Inicio">&#8962;</button>
         
         <div class="url-container">
             <input type="text" id="url-input" placeholder="Buscar o introducir dirección..." autocomplete="off">
         </div>
         
-        <button id="btn-go" class="nav-btn go-btn" title="Ir">▶</button>
+        <!-- Botón de vista previa de pestañas (Cuadrados superpuestos tipo Safari) -->
+        <button id="btn-tabs-toggle" class="nav-btn tabs-toggle-btn" title="Pestañas">
+            <span class="tabs-icon">&#10061;</span>
+            <span class="tabs-count" id="tabs-count-badge">1</span>
+        </button>
+        <button id="btn-go" class="nav-btn go-btn" title="Ir">&#9654;</button>
     </footer>
 
     <!-- MODAL DE OPCIONES Y HISTORIAL -->
     <div class="modal-overlay" id="options-modal">
         <div class="modal-card">
             <div class="modal-header">
-                <span>⚙️ Opciones de Netscape</span>
-                <span class="modal-close" id="btn-modal-close">✖</span>
+                <span>&#9881; Opciones de Netscape</span>
+                <span class="modal-close" id="btn-modal-close">&#10005;</span>
             </div>
             
             <div class="option-group">
@@ -68,7 +74,7 @@
             </div>
 
             <div class="option-group">
-                <label>📜 Historial reciente:</label>
+                <label>&#9776; Historial reciente:</label>
                 <div class="history-container">
                     <ul id="app-history-list" class="history-list"></ul>
                 </div>
