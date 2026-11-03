@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Netscape Home - iOS Edition</title>
+    <link rel="icon" type="image/x-icon" href="img/nts.ico">
+    <style>
+        :root {
+            --aero-bg: linear-gradient(to bottom, #e2efff 0%, #9fc5f8 100%);
+            --aero-card-bg: rgba(255, 255, 255, 0.88);
+            --aero-border: rgba(126, 167, 216, 0.9);
+            --aero-blue: #003366;
+            --aero-accent: #1e69de;
+            --aero-header-bg: linear-gradient(to bottom, #d6e4f0 0%, #a8c5df 100%);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+
+        body {
+            background: var(--aero-bg);
+            color: #111;
+            font-size: 12px;
+            padding: 8px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        /* 1. SISTEMA DE PESTAÑAS MÓVIL EN LA BIENVENIDA */
+        .mobile-tab-bar {
+            display: flex;
+            background: rgba(0, 34, 68, 0.85);
+            padding: 4px 4px 0 4px;
+            gap: 4px;
+            border-radius: 6px 6px 0 0;
+            overflow-x: auto;
+        }
+
+        .tab-btn {
+            background: rgba(255, 255, 255, 0.4);
+            color: #fff;
+            border: 1px solid var(--aero-border);
+            border-bottom: none;
+            padding: 5px 10px;
+            font-size: 11px;
+            border-radius: 4px 4px 0 0;
+            cursor: pointer;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .tab-btn.active {
+            background: rgba(240, 246, 255, 0.95);
+            color: var(--aero-blue);
+            font-weight: bold;
+        }
+
+        .tab-close {
+            font-size: 10px;
+            font-weight: bold;
+            color: #d00;
+            cursor: pointer;
+        }
+
+        .tab-add {
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px 4px 0 0;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* 2. PORTAL WRAPPER RESPONSIVO */
+        .portal-wrapper {
+            background: rgba(240, 246, 255, 0.85);
+            border: 1px solid var(--aero-border);
+            border-radius: 0 0 6px 6px;
+            padding: 10px;
+            box-shadow: 0 4px 16px rgba(0, 51, 102, 0.2);
+            backdrop-filter: blur(8px);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .hero-header {
+            background: var(--aero-header-bg);
+            border: 1px solid var(--aero-border);
+            padding: 8px 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-radius: 5px;
+        }
+
+        .brand-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .brand-logo {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
+        }
+
+        .brand-title h1 {
+            color: var(--aero-blue);
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        .btn-options-trigger {
+            background: linear-gradient(to bottom, #ffffff, #d0e4f8);
+            border: 1px solid var(--aero-border);
+            padding: 5px 10px;
+            font-size: 11px;
+            font-weight: bold;
+            color: var(--aero-blue);
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        /* CARD STYLES */
+        .aero-card {
+            background: var(--aero-card-bg);
+            border: 1px solid var(--aero-border);
+            border-radius: 6px;
+            padding: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .card-title {
+            border-bottom: 2px solid var(--aero-accent);
+            padding-bottom: 4px;
+            margin-bottom: 8px;
+            font-size: 12px;
+            font-weight: bold;
+            color: var(--aero-blue);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* 3. HISTORIAL DE BÚSQUEDA RÁPIDO */
+        .history-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            max-height: 120px;
+            overflow-y: auto;
+        }
+
+        .history-item {
+            background: #fff;
+            border: 1px solid #c0d8f0;
+            padding: 6px;
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+            cursor: pointer;
+        }
+
+        .history-item:active { background: #e0f0ff; }
+
+        /* 4. MODAL DE OPCIONES SENCILLITAS */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-card {
+            background: #f8fbfd;
+            border: 1px solid var(--aero-border);
+            border-radius: 8px;
+            width: 88%;
+            max-width: 340px;
+            padding: 14px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+        }
+
+        .modal-header {
+            font-size: 13px;
+            font-weight: bold;
+            color: var(--aero-blue);
+            border-bottom: 1px solid #b5cbe0;
+            padding-bottom: 6px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .option-group {
+            margin-bottom: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .option-group label { font-size: 11px; font-weight: 600; color: #333; }
+        .option-group select, .option-group input {
+            padding: 6px;
+            border: 1px solid var(--aero-border);
+            border-radius: 4px;
+            font-size: 11px;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 6px;
+            margin-top: 12px;
+        }
+
+        .btn-modal {
+            padding: 5px 12px;
+            border-radius: 4px;
+            border: 1px solid var(--aero-border);
+            cursor: pointer;
+            font-size: 11px;
+        }
+
+        .btn-primary { background: var(--aero-accent); color: #fff; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <!-- 1. BARRA DE PESTAÑAS MÓVIL -->
+    <div class="mobile-tab-bar" id="tab-container">
+        <div class="tab-btn active" data-tab="1" onclick="switchTab(1)">
+            <span>🏠 Inicio</span>
+        </div>
+        <button class="tab-add" onclick="addNewTab()">+</button>
+    </div>
+
+    <!-- 2. CONTENEDOR PRINCIPAL DEL PORTAL -->
+    <div class="portal-wrapper">
+        <header class="hero-header">
+            <div class="brand-container">
+                <img src="img/netscape-anim.gif" class="brand-logo" alt="Logo" onerror="this.src='img/nts.ico'">
+                <div class="brand-title">
+                    <h1>Netscape Mobile</h1>
+                </div>
+            </div>
+            <button class="btn-options-trigger" onclick="toggleModal(true)">⚙️ Opciones</button>
+        </header>
+
+        <!-- CARD: BÚSQUEDA RÁPIDA -->
+        <div class="aero-card">
+            <div class="card-title">🔍 Búsqueda Rápida</div>
+            <div style="display: flex; gap: 4px;">
+                <input type="text" id="portal-search-input" placeholder="Buscar en la web..." style="flex: 1; padding: 7px; border: 1px solid var(--aero-border); border-radius: 4px; font-size: 12px;" onkeypress="if(event.key==='Enter') executeSearch()">
+                <button onclick="executeSearch()" style="padding: 7px 12px; background: var(--aero-accent); color: white; border: none; border-radius: 4px; font-weight: bold;">Ir</button>
+            </div>
+        </div>
+
+        <!-- CARD: HISTORIAL RECIENTE -->
+        <div class="aero-card">
+            <div class="card-title">
+                <span>📜 Historial de Búsqueda</span>
+                <span style="font-size: 9px; color: #d00; cursor: pointer;" onclick="clearHistory()">Borrar</span>
+            </div>
+            <ul class="history-list" id="history-list">
+                <!-- Se llena dinámicamente -->
+            </ul>
+        </div>
+
+        <!-- CARD: ACCESOS DIRECTOS -->
+        <div class="aero-card">
+            <div class="card-title">⭐ Favoritos y Accesos</div>
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px;">
+                <button onclick="openExternal('https://www.google.com')" style="padding: 8px; border: 1px solid var(--aero-border); background: #fff; border-radius: 4px; cursor: pointer;">🌐 Google</button>
+                <button onclick="openExternal('https://www.wikipedia.org')" style="padding: 8px; border: 1px solid var(--aero-border); background: #fff; border-radius: 4px; cursor: pointer;">📚 Wikipedia</button>
+                <button onclick="openExternal('https://archive.org')" style="padding: 8px; border: 1px solid var(--aero-border); background: #fff; border-radius: 4px; cursor: pointer;">🏛️ Archive.org</button>
+                <button onclick="openExternal('https://html.duckduckgo.com/html/')" style="padding: 8px; border: 1px solid var(--aero-border); background: #fff; border-radius: 4px; cursor: pointer;">🦆 DuckDuckGo</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. MODAL DE OPCIONES SENCILLITAS -->
+    <div class="modal-overlay" id="options-modal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <span>⚙️ Preferencias Netscape</span>
+                <span style="cursor: pointer;" onclick="toggleModal(false)">✖</span>
+            </div>
+            
+            <div class="option-group">
+                <label>Motor de búsqueda predeterminado:</label>
+                <select id="setting-engine">
+                    <option value="google">Google</option>
+                    <option value="duckduckgo">DuckDuckGo</option>
+                    <option value="bing">Bing</option>
+                </select>
+            </div>
+
+            <div class="option-group">
+                <label>Página de inicio personalizada:</label>
+                <input type="text" id="setting-homepage" value="home.html">
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn-modal" onclick="toggleModal(false)">Cancelar</button>
+                <button class="btn-modal btn-primary" onclick="saveSettings()">Guardar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let tabCount = 1;
+        let activeTab = 1;
+
+        // GESTIÓN DE PESTAÑAS
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            const currentTab = document.querySelector(`[data-tab="${tabId}"]`);
+            if (currentTab) currentTab.classList.add('active');
+            activeTab = tabId;
+        }
+
+        function addNewTab() {
+            tabCount++;
+            const tabContainer = document.getElementById('tab-container');
+            const newTabBtn = document.createElement('div');
+            newTabBtn.className = 'tab-btn';
+            newTabBtn.dataset.tab = tabCount;
+            newTabBtn.onclick = () => switchTab(tabCount);
+            newTabBtn.innerHTML = `<span>Pestaña ${tabCount}</span> <span class="tab-close" onclick="closeTab(event, ${tabCount})">✕</span>`;
+            
+            tabContainer.insertBefore(newTabBtn, tabContainer.lastElementChild);
+            switchTab(tabCount);
+        }
+
+        function closeTab(event, tabId) {
+            event.stopPropagation();
+            const tabBtn = document.querySelector(`[data-tab="${tabId}"]`);
+            if (tabBtn) tabBtn.remove();
+            if (activeTab === tabId) switchTab(1);
+        }
+
+        // BÚSQUEDA E HISTORIAL
+        function executeSearch() {
+            const input = document.getElementById('portal-search-input');
+            const query = input.value.trim();
+            if (!query) return;
+
+            saveHistory(query);
+            const engine = localStorage.getItem('netscape_engine') || 'google';
+            let targetUrl = `https://www.google.com/search?q=${encodeURIComponent(query)}&igu=1`;
+            if (engine === 'duckduckgo') targetUrl = `https://html.duckduckgo.com/html/?q=${encodeURIComponent(query)}`;
+            if (engine === 'bing') targetUrl = `https://www.bing.com/search?q=${encodeURIComponent(query)}`;
+
+            window.location.href = targetUrl;
+        }
+
+        function saveHistory(query) {
+            let history = JSON.parse(localStorage.getItem('netscape_mobile_history')) || [];
+            history.unshift({ query, time: new Date().toLocaleTimeString() });
+            if (history.length > 8) history.pop();
+            localStorage.setItem('netscape_mobile_history', JSON.stringify(history));
+            renderHistory();
+        }
+
+        function renderHistory() {
+            const list = document.getElementById('history-list');
+            let history = JSON.parse(localStorage.getItem('netscape_mobile_history')) || [];
+            list.innerHTML = "";
+            if (history.length === 0) {
+                list.innerHTML = "<li style='color: #777; font-size: 10px;'>Sin búsquedas recientes</li>";
+                return;
+            }
+            history.forEach(item => {
+                const li = document.createElement('li');
+                li.className = 'history-item';
+                li.innerHTML = `<span>🔍 ${item.query}</span><span style='color: #888; font-size: 9px;'>${item.time}</span>`;
+                li.onclick = () => {
+                    document.getElementById('portal-search-input').value = item.query;
+                    executeSearch();
+                };
+                list.appendChild(li);
+            });
+        }
+
+        function clearHistory() {
+            localStorage.removeItem('netscape_mobile_history');
+            renderHistory();
+        }
+
+        function openExternal(url) {
+            window.location.href = url;
+        }
+
+        // OPCIONES SENCILLITAS (MODAL)
+        function toggleModal(show) {
+            document.getElementById('options-modal').style.display = show ? 'flex' : 'none';
+        }
+
+        function saveSettings() {
+            const engine = document.getElementById('setting-engine').value;
+            const homepage = document.getElementById('setting-homepage').value;
+            localStorage.setItem('netscape_engine', engine);
+            localStorage.setItem('netscape_homepage', homepage);
+            toggleModal(false);
+            alert('Configuración guardada correctamente.');
+        }
+
+        // CARGA INICIAL
+        window.addEventListener('DOMContentLoaded', () => {
+            renderHistory();
+            const savedEngine = localStorage.getItem('netscape_engine') || 'google';
+            document.getElementById('setting-engine').value = savedEngine;
+        });
+    </script>
+</body>
+</html>

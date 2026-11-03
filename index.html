@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+    <!-- Metadatos y soporte para pantalla de inicio en iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Netscape">
+    <link rel="apple-touch-icon" href="img/nts.ico">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Netscape Navigator - iOS Edition</title>
+    <link rel="icon" type="image/x-icon" href="img/nts.ico">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="theme-aero">
+
+    <!-- Cabecera / Barra superior estilo Aero -->
+    <header class="netscape-header">
+        <div class="logo-title-container">
+            <img src="img/netscape-anim.gif" alt="Netscape Logo" class="netscape-logo" onerror="this.src='img/nts.ico'">
+            <span class="app-title">Netscape Navigator™</span>
+        </div>
+        <button id="btn-options-trigger" class="header-btn" title="Opciones">⚙️</button>
+    </header>
+
+    <!-- Sistema de Pestañas Móvil en la App -->
+    <div class="app-tab-bar" id="tab-container">
+        <button id="btn-new-tab" class="tab-add">+</button>
+    </div>
+
+    <!-- Contenedor Web Viewport -->
+    <div class="browser-viewport" id="browser-container"></div>
+
+    <!-- Barra de herramientas inferior táctil -->
+    <footer class="mobile-toolbar">
+        <button id="btn-back" class="nav-btn" title="Atrás">◄</button>
+        <button id="btn-forward" class="nav-btn" title="Adelante">►</button>
+        <button id="btn-reload" class="nav-btn" title="Recargar">🔄</button>
+        <button id="btn-home" class="nav-btn" title="Inicio">🏠</button>
+        
+        <div class="url-container">
+            <input type="text" id="url-input" placeholder="Buscar o introducir dirección..." autocomplete="off">
+        </div>
+        
+        <button id="btn-go" class="nav-btn go-btn" title="Ir">▶</button>
+    </footer>
+
+    <!-- MODAL DE OPCIONES Y HISTORIAL -->
+    <div class="modal-overlay" id="options-modal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <span>⚙️ Opciones de Netscape</span>
+                <span class="modal-close" id="btn-modal-close">✖</span>
+            </div>
+            
+            <div class="option-group">
+                <label for="setting-engine">Motor de Búsqueda:</label>
+                <select id="setting-engine">
+                    <option value="google">Google</option>
+                    <option value="duckduckgo">DuckDuckGo</option>
+                    <option value="bing">Bing</option>
+                </select>
+            </div>
+
+            <div class="option-group">
+                <label for="setting-homepage">Página de inicio:</label>
+                <input type="text" id="setting-homepage" value="./home.html">
+            </div>
+
+            <div class="option-group">
+                <label>📜 Historial reciente:</label>
+                <div class="history-container">
+                    <ul id="app-history-list" class="history-list"></ul>
+                </div>
+                <button id="btn-clear-history" class="btn-clear-hist">Borrar Historial</button>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn-modal" id="btn-modal-cancel">Cancelar</button>
+                <button class="btn-modal btn-primary" id="btn-modal-save">Guardar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
